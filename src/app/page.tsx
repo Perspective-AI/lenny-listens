@@ -98,20 +98,21 @@ export default function Home() {
             <div className="inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-sm font-medium text-amber-800 dark:bg-amber-900/30 dark:text-amber-200">
               <span>Powered by 269 episodes of Lenny&apos;s Podcast</span>
             </div>
-            <a
-              href="https://getperspective.ai?utm_source=lenny-listens"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-purple-100 px-4 py-2 text-sm font-medium text-purple-800 transition-colors hover:bg-purple-200 dark:bg-purple-900/30 dark:text-purple-200 dark:hover:bg-purple-900/50"
-            >
-              <span>Built with</span>
-              <img
-                src="/perspective-logo.png"
-                alt="Perspective AI"
-                className="h-4 w-auto"
-              />
-            </a>
           </div>
+          <a
+            href="https://getperspective.ai?utm_source=lenny-listens"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-8 inline-flex items-center gap-2 text-sm text-zinc-500 transition-colors hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+          >
+            <span>Built with</span>
+            <img
+              src="/perspective-logo.png"
+              alt="Perspective AI"
+              className="h-4 w-auto"
+            />
+            <span className="font-medium">Perspective AI</span>
+          </a>
 
           <h1 className="mb-6 text-4xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-5xl md:text-6xl">
             Get <span className="text-amber-600 dark:text-amber-400">Lenny</span> to interview your customers
@@ -243,14 +244,38 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Footer */}
-        <footer className="mt-24 text-center text-sm text-zinc-500">
-          <p>
-            Built with{" "}
-            <a href="https://getperspective.ai?utm_source=lenny-listens" className="text-amber-600 hover:underline dark:text-amber-400">
-              Perspective AI
+        {/* Perspective CTA */}
+        <div className="mt-24 rounded-2xl border border-zinc-200 bg-white p-8 dark:border-zinc-700 dark:bg-zinc-800/50">
+          <div className="flex flex-col items-center text-center sm:flex-row sm:text-left sm:gap-6">
+            <div className="mb-4 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-700">
+              <img src="/perspective-logo.png" alt="Perspective AI" className="h-8 w-auto" />
+            </div>
+            <div className="flex-1">
+              <h3 className="mb-1 text-lg font-semibold text-zinc-900 dark:text-white">
+                Want to build your own AI interviews?
+              </h3>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                Perspective AI lets you create custom research interviews for any use case — not just Lenny&apos;s methodology.
+              </p>
+            </div>
+            <a
+              href="https://getperspective.ai/signup?utm_source=lenny-listens"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex h-10 flex-shrink-0 items-center gap-2 rounded-full border border-zinc-300 px-5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-700 sm:mt-0"
+            >
+              Try Perspective AI
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
             </a>
-            {" "}• Inspired by{" "}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <footer className="mt-8 text-center text-sm text-zinc-500">
+          <p>
+            Inspired by{" "}
             <a href="https://www.lennysnewsletter.com?utm_source=lenny-listens" className="text-amber-600 hover:underline dark:text-amber-400">
               Lenny&apos;s Newsletter
             </a>
