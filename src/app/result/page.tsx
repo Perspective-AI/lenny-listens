@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { GeneratedPerspective, getUseCaseLabel, buildInterviewPrompt } from "@/lib/lenny-methodology";
+import { GeneratedPerspective, getUseCaseLabel } from "@/lib/lenny-methodology";
 
 declare global {
   interface Window {
@@ -295,10 +295,35 @@ function ResultContent() {
 
         {/* Action Cards */}
         <div className="grid gap-6 md:grid-cols-2">
-          {/* Try It Yourself Card */}
+          {/* Send to Customers Card - Primary */}
           <div className="rounded-2xl bg-white p-6 shadow-lg dark:bg-zinc-800">
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">
               <svg className="h-6 w-6 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <h2 className="mb-2 text-xl font-bold text-zinc-900 dark:text-white">
+              Send to your customers
+            </h2>
+            <p className="mb-6 text-zinc-600 dark:text-zinc-400">
+              Get this interview in your own Perspective AI workspace and start gathering real insights.
+            </p>
+            <a
+              href={`https://getperspective.ai/claim/${perspective.perspective_id}?utm_source=lenny-listens`}
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-amber-500 px-6 font-semibold text-white transition-colors hover:bg-amber-600"
+            >
+              <img src="/perspective-logo.png" alt="" className="h-5 w-5 brightness-0 invert" />
+              Send to your customers
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
+          </div>
+
+          {/* Try It Yourself Card - Secondary */}
+          <div className="rounded-2xl bg-white p-6 shadow-lg dark:bg-zinc-800">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-700">
+              <svg className="h-6 w-6 text-zinc-600 dark:text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -311,7 +336,7 @@ function ResultContent() {
             </p>
             <button
               onClick={openPreviewInterview}
-              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-amber-500 px-6 font-semibold text-white transition-colors hover:bg-amber-600"
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border-2 border-zinc-300 px-6 font-semibold text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-700"
             >
               Start Preview Interview
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -319,50 +344,21 @@ function ResultContent() {
               </svg>
             </button>
           </div>
-
-          {/* Use With Customers Card */}
-          <div className="rounded-2xl bg-white p-6 shadow-lg dark:bg-zinc-800">
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/30">
-              <svg className="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-            </div>
-            <h2 className="mb-2 text-xl font-bold text-zinc-900 dark:text-white">
-              Use with your customers
-            </h2>
-            <p className="mb-6 text-zinc-600 dark:text-zinc-400">
-              Create this interview in your own Perspective AI workspace to start gathering real insights.
-            </p>
-            <a
-              href={`https://getperspective.ai/research/new?utm_source=lenny-listens&question=${encodeURIComponent(buildInterviewPrompt(perspective.intake))}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-purple-600 px-6 font-semibold text-white transition-colors hover:bg-purple-700"
-            >
-              <img src="/perspective-logo.png" alt="" className="h-5 w-5 brightness-0 invert" />
-              Create in Perspective AI
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </a>
-          </div>
         </div>
 
         {/* CTA to Sign Up */}
-        <div className="mt-12 rounded-2xl bg-gradient-to-r from-purple-600 to-purple-800 p-8 text-center text-white">
+        <div className="mt-12 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-700 p-8 text-center text-white">
           <h2 className="mb-3 text-2xl font-bold">
             Ready to interview your real customers?
           </h2>
-          <p className="mb-6 text-purple-200">
-            Create this interview in your own workspace. Analyze responses with AI and get actionable insights.
+          <p className="mb-6 text-amber-100">
+            Get this interview in your own workspace. Share with customers and get actionable insights.
           </p>
           <a
-            href={`https://getperspective.ai/research/new?utm_source=lenny-listens&question=${encodeURIComponent(buildInterviewPrompt(perspective.intake))}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-8 font-semibold text-purple-600 transition-colors hover:bg-purple-50"
+            href={`https://getperspective.ai/claim/${perspective.perspective_id}?utm_source=lenny-listens`}
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-8 font-semibold text-amber-600 transition-colors hover:bg-amber-50"
           >
-            Get started free
+            Send to your customers
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
