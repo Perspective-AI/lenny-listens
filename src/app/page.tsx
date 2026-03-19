@@ -108,7 +108,8 @@ export default function Home() {
             <span>Built with</span>
             <img
               src="/perspective-logo.png"
-              alt="Perspective AI"
+              alt=""
+              aria-hidden="true"
               className="h-4 w-auto"
             />
             <span className="font-medium">Perspective AI</span>
