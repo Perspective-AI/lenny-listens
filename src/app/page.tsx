@@ -243,6 +243,42 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Perspective AI — gentle conversion */}
+        <div className="mt-24 text-center">
+          <div className="mx-auto max-w-2xl">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400">
+              <img
+                src="/perspective-logo.png"
+                alt=""
+                className="h-4 w-auto"
+              />
+              <span>Built with Perspective AI</span>
+            </div>
+
+            <h2 className="mb-4 text-2xl font-bold tracking-tight text-zinc-900 dark:text-white sm:text-3xl">
+              Want to run your own<br className="hidden sm:inline" /> AI-powered interviews?
+            </h2>
+
+            <p className="mx-auto mb-8 max-w-lg text-zinc-500 dark:text-zinc-400">
+              Everything you see here is built on Perspective AI. Create custom
+              conversational interviews, share them with customers, and get
+              insights — automatically.
+            </p>
+
+            <a
+              href="https://getperspective.ai/research/new?utm_source=lenny-listens"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 text-base font-semibold text-amber-600 transition-colors hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
+            >
+              Try Perspective AI free
+              <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
         {/* Footer */}
         <footer className="mt-24 text-center text-sm text-zinc-500">
           <p>
@@ -250,7 +286,7 @@ export default function Home() {
             <a href="https://getperspective.ai?utm_source=lenny-listens" className="text-amber-600 hover:underline dark:text-amber-400">
               Perspective AI
             </a>
-            {" "}• Inspired by{" "}
+            {" "}&bull;{" "}Inspired by{" "}
             <a href="https://www.lennysnewsletter.com?utm_source=lenny-listens" className="text-amber-600 hover:underline dark:text-amber-400">
               Lenny&apos;s Newsletter
             </a>
