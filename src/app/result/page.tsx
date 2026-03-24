@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { GeneratedPerspective, getUseCaseLabel, buildInterviewPrompt } from "@/lib/lenny-methodology";
+import { GeneratedPerspective, getUseCaseLabel } from "@/lib/lenny-methodology";
 
 declare global {
   interface Window {
@@ -34,6 +34,23 @@ const LENNY_QUOTES = [
   { quote: "Your customers know things you don't. Your job is to extract that knowledge.", topic: "On research" },
   { quote: "Don't ask people if they'd use your product. Ask about their actual behavior.", topic: "On asking better questions" },
 ];
+
+const PM_USE_CASES = [
+  { label: "Feature requests", icon: "lightbulb", href: "https://getperspective.ai/use-cases/feature-requests?utm_source=lenny-listens" },
+  { label: "User feedback", icon: "chat", href: "https://getperspective.ai/use-cases/user-feedback?utm_source=lenny-listens" },
+  { label: "Roadmap validation", icon: "map", href: "https://getperspective.ai/use-cases/roadmap-validation?utm_source=lenny-listens" },
+  { label: "Customer health", icon: "chart", href: "https://getperspective.ai/use-cases/ai-customer-experience?utm_source=lenny-listens" },
+] as const;
+
+function UseCaseIcon({ type }: { type: string }) {
+  switch (type) {
+    case "lightbulb": return <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>;
+    case "chat": return <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>;
+    case "map": return <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>;
+    case "chart": return <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>;
+    default: return null;
+  }
+}
 
 function ResultContent() {
   const searchParams = useSearchParams();
@@ -270,107 +287,121 @@ function ResultContent() {
 
   // Ready state - show the generated perspective
   const companyName = perspective.intake?.company_domain?.replace(/\.(com|io|co|ai|org|net)$/i, "") || "Your Company";
+  const claimUrl = `https://getperspective.ai/claim/${perspective.perspective_id}?utm_source=lenny-listens`;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white dark:from-zinc-900 dark:to-black">
-      <main className="mx-auto max-w-3xl px-6 py-16">
+      <main className="mx-auto max-w-2xl px-6 py-16">
         {/* Success Header */}
-        <div className="mb-12 text-center">
+        <div className="mb-10 text-center">
           <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
             <svg className="h-8 w-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h1 className="mb-4 text-3xl font-bold text-zinc-900 dark:text-white">
-            Your Lenny interview is ready!
+          <h1 className="mb-3 text-3xl font-bold text-zinc-900 dark:text-white">
+            Your interview for {companyName} is ready
           </h1>
           <p className="text-lg text-zinc-600 dark:text-zinc-400">
-            Custom research interview for{" "}
-            <span className="font-semibold text-amber-600 dark:text-amber-400">
-              {companyName}
-            </span>{" "}
-            about {getUseCaseLabel(perspective.intake?.use_case || "")}
+            Lenny designed a {getUseCaseLabel(perspective.intake?.use_case || "")} interview just for you.
+            <br />
+            Now share it with your customers and start collecting insights.
           </p>
         </div>
 
-        {/* Action Cards */}
-        <div className="grid gap-6 md:grid-cols-2">
-          {/* Try It Yourself Card */}
-          <div className="rounded-2xl bg-white p-6 shadow-lg dark:bg-zinc-800">
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30">
-              <svg className="h-6 w-6 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h2 className="mb-2 text-xl font-bold text-zinc-900 dark:text-white">
-              Try it yourself
-            </h2>
-            <p className="mb-6 text-zinc-600 dark:text-zinc-400">
-              Experience the interview as if you were one of your customers being interviewed by Lenny.
-            </p>
-            <button
-              onClick={openPreviewInterview}
-              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-amber-500 px-6 font-semibold text-white transition-colors hover:bg-amber-600"
-            >
-              Start Preview Interview
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-              </svg>
-            </button>
+        {/* Primary CTA Card */}
+        <div className="rounded-2xl bg-white p-8 shadow-lg dark:bg-zinc-800">
+          <div className="mb-4 flex items-center gap-2">
+            <img src="/perspective-logo.png" alt="" aria-hidden="true" className="h-5 w-auto" />
+            <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Perspective AI</span>
           </div>
+          <h2 className="mb-2 text-xl font-bold text-zinc-900 dark:text-white">
+            Start collecting real customer insights
+          </h2>
+          <p className="mb-6 text-zinc-600 dark:text-zinc-400">
+            Get this interview in your Perspective AI workspace. Share a link with customers, collect responses, and get AI-analyzed insights.
+          </p>
 
-          {/* Use With Customers Card */}
-          <div className="rounded-2xl bg-white p-6 shadow-lg dark:bg-zinc-800">
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/30">
-              <svg className="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          {/* What you get */}
+          <div className="mb-6 grid grid-cols-3 gap-4">
+            <div className="flex flex-col items-center rounded-xl bg-amber-50 p-3 text-center dark:bg-amber-900/10">
+              <svg className="mb-1.5 h-5 w-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+              <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Shareable link</span>
+            </div>
+            <div className="flex flex-col items-center rounded-xl bg-amber-50 p-3 text-center dark:bg-amber-900/10">
+              <svg className="mb-1.5 h-5 w-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
+              <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">Unlimited responses</span>
             </div>
-            <h2 className="mb-2 text-xl font-bold text-zinc-900 dark:text-white">
-              Use with your customers
-            </h2>
-            <p className="mb-6 text-zinc-600 dark:text-zinc-400">
-              Create this interview in your own Perspective AI workspace to start gathering real insights.
-            </p>
-            <a
-              href={`https://getperspective.ai/research/new?utm_source=lenny-listens&question=${encodeURIComponent(buildInterviewPrompt(perspective.intake))}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-purple-600 px-6 font-semibold text-white transition-colors hover:bg-purple-700"
-            >
-              <img src="/perspective-logo.png" alt="" className="h-5 w-5 brightness-0 invert" />
-              Create in Perspective AI
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            <div className="flex flex-col items-center rounded-xl bg-amber-50 p-3 text-center dark:bg-amber-900/10">
+              <svg className="mb-1.5 h-5 w-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
-            </a>
+              <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">AI analysis</span>
+            </div>
           </div>
-        </div>
 
-        {/* CTA to Sign Up */}
-        <div className="mt-12 rounded-2xl bg-gradient-to-r from-purple-600 to-purple-800 p-8 text-center text-white">
-          <h2 className="mb-3 text-2xl font-bold">
-            Ready to interview your real customers?
-          </h2>
-          <p className="mb-6 text-purple-200">
-            Create this interview in your own workspace. Analyze responses with AI and get actionable insights.
-          </p>
           <a
-            href={`https://getperspective.ai/research/new?utm_source=lenny-listens&question=${encodeURIComponent(buildInterviewPrompt(perspective.intake))}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-white px-8 font-semibold text-purple-600 transition-colors hover:bg-purple-50"
+            href={claimUrl}
+            className="inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-amber-500 px-6 text-lg font-semibold text-white shadow-md transition-all hover:bg-amber-600 hover:shadow-lg"
           >
-            Get started free
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <img src="/perspective-logo.png" alt="" className="h-5 w-5 brightness-0 invert" />
+            Get your interview
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
           </a>
+          <p className="mt-3 text-center text-sm text-zinc-500 dark:text-zinc-400">
+            Free to start &middot; No credit card required
+          </p>
+        </div>
+
+        {/* Secondary: Try it yourself */}
+        <div className="mt-6 text-center">
+          <button
+            onClick={openPreviewInterview}
+            className="text-sm font-medium text-zinc-500 underline decoration-zinc-300 underline-offset-4 transition-colors hover:text-amber-600 hover:decoration-amber-400 dark:text-zinc-400 dark:decoration-zinc-600 dark:hover:text-amber-400"
+          >
+            Or preview the interview yourself first
+          </button>
+        </div>
+
+        {/* More use cases */}
+        <div className="mt-14 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 dark:border-zinc-700 dark:bg-zinc-800/30 sm:p-8">
+          <p className="mb-5 text-center text-base font-semibold text-zinc-900 dark:text-white">
+            Hundreds of PMs also use Perspective AI for
+          </p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {PM_USE_CASES.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col items-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3 py-3.5 text-center transition-all hover:border-amber-300 hover:shadow-sm dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-amber-600"
+              >
+                <span className="text-amber-600 dark:text-amber-400"><UseCaseIcon type={item.icon} /></span>
+                <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">{item.label}</span>
+              </a>
+            ))}
+          </div>
+          <p className="mt-4 text-center">
+            <a
+              href="https://getperspective.ai/use-cases?role=product-manager&utm_source=lenny-listens"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
+            >
+              Explore all use cases →
+            </a>
+          </p>
         </div>
 
         {/* Back Link */}
-        <div className="mt-8 text-center">
+        <div className="mt-10 text-center">
           <a
             href="/"
             className="text-sm text-zinc-500 hover:text-amber-600 dark:text-zinc-400 dark:hover:text-amber-400"
